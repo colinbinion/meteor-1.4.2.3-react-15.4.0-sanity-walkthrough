@@ -1,49 +1,47 @@
-// this import needs to be added to any react component
 import React, { Component } from 'react';
-
 import { createContainer } from 'meteor/react-meteor-data';
+import Item from './Item';
 
 import Items from '../api/Items';
 
-// declare a var/const/let
-let hello = 'Colin';
-// nested headingClick function inside the component. <h1> added this. to scope to component instead of previous global sense
-// let headingClick = function() {
-//   console.log('hello');
-// }
-// this is defining an inline component for sanity checking.  export default defines component allowing import at client/main.js not to use {}
 class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      count: 0
-    }
+  addItems(event) {
+    event.preventDefault();
+    Items.insert({
+      itemOne: {
+        text: this.refs.itemOne.value.trim(),
+        value: 0,
+      },
+      itemTwo: {
+        text: this.refs.itemTwo.value.trim(),
+        value: 0,
+      }
+    });
   }
-  headingClick() {
-    this.setState({count: this.state.count + 1});
-  }
-
   render() {
-    return ( 
-// {hello} is referencing variable hello. onClick is an event property. this. calls variable in terms of component
-      <header onClick={this.headingClick.bind(this)}>
-        {/* {this.state.count} */}
-        <Heading count={this.state.count} />
-      </header>
+    return (
+      <div>
+        <header>
+          <h1>Colin's Voting Thing</h1>
+        </header>
+        <main>
+          <form onSubmit={this.addItems.bind(this)}>
+            <input type='text' ref='itemOne' />
+            <input type='text' ref='itemTwo' />
+            <button type='submit'>Add VOTING Topics</button>
+          </form>
+          {this.props.items.map((item) => {
+            return <Item item={item} key={item._id}/>
+          })}
+        </main>
+      </div>
     );
   }
 }
+
 
 export default createContainer(() => {
   return {
     items: Items.find({}).fetch()
   }
 }, App);
-
-class Heading extends Component {
-  render() {
-    return (
-      <h1>{this.props.count}</h1>
-    )
-  }
-}
