@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
+import { LoginButtons } from 'meteor/okgrow:accounts-ui-react';
+
+
 import Item from './Item';
 
 import Items from '../api/Items';
@@ -9,7 +12,7 @@ class App extends Component {
     event.preventDefault();
     const itemOne = this.refs.itemOne.value.trim();
     const itemTwo = this.refs.itemTwo.value.trim();
-    if (itemOne !== '' && itemTwo !== ''){
+    if (itemOne !== '' && itemTwo !== '') {
       Items.insert({
         itemOne: {
           text: itemOne,
@@ -23,19 +26,19 @@ class App extends Component {
       this.refs.itemOne.value = '';
       this.refs.itemTwo.value = '';
     }
-
   }
   render() {
     return (
       <div>
         <header>
-          <h1>Colin's Voting Thing</h1>
+          <h1>Colin's voting thingamajig</h1>
+          <LoginButtons />
         </header>
         <main>
           <form className='new-items' onSubmit={this.addItems.bind(this)}>
             <input type='text' ref='itemOne' />
-            <input type='text' ref='itemTwo' />
-            <button type='submit'>Add VOTING Topics</button>
+            <input type='text' ref='itemTwo'/>
+            <button type='submit'>Add Items</button>
           </form>
           {this.props.items.map((item) => {
             return <Item item={item} key={item._id}/>
